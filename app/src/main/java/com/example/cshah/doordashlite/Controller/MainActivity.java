@@ -26,22 +26,19 @@ public class MainActivity extends AppCompatActivity {
     private List<Restaurant> restaurantsList = new ArrayList<>();
     private RecyclerView recyclerView;
     private RestaurantAdapter mAdapter;
-    ProgressDialog progressDoalog;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       /* Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);*/
-
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext() , DividerItemDecoration.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        progressDoalog = new ProgressDialog(MainActivity.this);
-        progressDoalog.setMessage("Loading....");
-        progressDoalog.show();
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setMessage("Loading....");
+        progressDialog.show();
 
         /*Create handle for the RetrofitInstance interface*/
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
@@ -49,26 +46,16 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<List<Restaurant>>() {
             @Override
             public void onResponse(Call<List<Restaurant>> call, Response<List<Restaurant>> response) {
-                progressDoalog.dismiss();
+                progressDialog.dismiss();
                 generateDataList(response.body());
             }
 
             @Override
             public void onFailure(Call<List<Restaurant>> call, Throwable t) {
-                progressDoalog.dismiss();
+                progressDialog.dismiss();
                 Toast.makeText(MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void prepareMovieData() {
-  /*      Restaurant restaurant = new Restaurant("Mad Max: Fury Road", "Action & Adventure", "2015");
-        restaurantsList.add(restaurant);
-
-        restaurant = new Restaurant("Inside Out", "Animation, Kids & Family", "2015");
-        restaurantsList.add(restaurant);
-
-        mAdapter.notifyDataSetChanged();*/
     }
 
     private void generateDataList(List<Restaurant> restaurantsList) {
@@ -78,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-       // mAdapter.notifyDataSetChanged();
+
     }
 
 }
